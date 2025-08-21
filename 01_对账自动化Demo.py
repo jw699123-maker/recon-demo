@@ -2,6 +2,56 @@ import io
 import numpy as np
 import pandas as pd
 import streamlit as st
+import json, io, pandas as pd
+import streamlit as st
+
+# 侧边栏：上传 rules.json（可选）
+rule_file = st.sidebar.file_uploader("上传 rules.json（可选）", type=["json"])
+
+# 若没有上传，也可以从仓库内置文件读取
+def load_rules():
+    if rule_file is not None:
+        return json.load(rule_file)
+    try:
+        with open("rules.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    except:
+        return None
+
+rules = load_rules()
+
+# 使用示例：容差
+def amounts_equal(a: float, b: float, ccy: str) -> bool:
+    """
+    根据 rules.json 的容差设置比较金额是否视为相等。
+    兼容三种模式：absolute / percent / both。
+    """
+    # 没有规则时的兜底：四舍五入到 2 位后直接比较
+    if not rules or "tolerance" not in rules:
+        return round(float(a), 2) == round(float(b), 2)
+
+    tol = rules["tolerance"]  # 注意是 tol，不是 t
+    mode = tol.get("mode", "both")
+
+    # 绝对容差（可按币种覆盖）
+    abs_tol = float(tol.get("absolute", {}).get("value", 0.0))
+    per_ccy = tol.get("absolute", {}).get("per_currency", {}) or {}
+    if ccy in per_ccy:
+        abs_tol = float(per_ccy[ccy])
+
+    # 百分比容差（写成完整的 if-else 三元表达式，避免 “应为 else” 报错）
+    if mode in ("percent", "both"):
+        pct_tol = float(tol.get("percent", {}).get("value", 0.0)) / 100.0
+    else:
+        pct_tol = 0.0
+
+    # 逐项判断
+    abs_ok = (abs(float(a) - float(b)) <= abs_tol) if mode in ("absolute", "both") else True
+    pct_base = max(abs(float(b)), 1e-9)  # 避免除零
+    pct_ok = ((abs(float(a) - float(b)) / pct_base) <= pct_tol) if mode in ("percent", "both") else True
+
+    return abs_ok and pct_ok
+
 
 # ---------- Page config ----------
 st.set_page_config(page_title="对账自动化 Demo（发票×账单）", page_icon="✅", layout="wide")
