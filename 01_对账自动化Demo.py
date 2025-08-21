@@ -4,6 +4,9 @@ import pandas as pd
 import streamlit as st
 import json
 
+# ---------- Page config ----------
+st.set_page_config(page_title="对账自动化 Demo（发票×账单）", page_icon="✅", layout="wide")
+
 # 侧边栏：上传 rules.json（可选）
 rule_file = st.sidebar.file_uploader("上传 rules.json（可选）", type=["json"])
 
@@ -38,7 +41,7 @@ def amounts_equal(a: float, b: float, ccy: str) -> bool:
     if ccy in per_ccy:
         abs_tol = float(per_ccy[ccy])
 
-    # 百分比容差（写成完整的 if-else 三元表达式，避免 “应为 else” 报错）
+    # 百分比容差（写成完整的 if-else 三元表达式，避免 "应为 else" 报错）
     if mode in ("percent", "both"):
         pct_tol = float(tol.get("percent", {}).get("value", 0.0)) / 100.0
     else:
@@ -50,10 +53,6 @@ def amounts_equal(a: float, b: float, ccy: str) -> bool:
     pct_ok = ((abs(float(a) - float(b)) / pct_base) <= pct_tol) if mode in ("percent", "both") else True
 
     return abs_ok and pct_ok
-
-
-# ---------- Page config ----------
-st.set_page_config(page_title="对账自动化 Demo（发票×账单）", page_icon="✅", layout="wide")
 st.title("对账自动化 Demo（发票 × 账单）")
 st.caption("上传两张表 → 匹配/差异/缺失/重复 → 一键导出异常清单")
 
