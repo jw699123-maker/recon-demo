@@ -2,8 +2,7 @@ import io
 import numpy as np
 import pandas as pd
 import streamlit as st
-import json, io, pandas as pd
-import streamlit as st
+import json
 
 # 侧边栏：上传 rules.json（可选）
 rule_file = st.sidebar.file_uploader("上传 rules.json（可选）", type=["json"])
