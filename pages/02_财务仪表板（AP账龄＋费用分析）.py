@@ -5,10 +5,9 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-st.set_page_config(page_title="财务仪表板 Demo（AP账龄 + 费用分析）", layout="wide")
-st.title("财务仪表板 Demo（AP 账龄 + 费用分析）")
-st.caption("上传三张 CSV（expenses / ap_invoices / vendors），或直接使用示例数据。支持筛选、动态图表、异常导出。")
-
+st.set_page_config(page_title="财务仪表板（AP 账龄＋费用分析）", page_icon="📊", layout="wide")
+st.title("财务仪表板（AP 账龄＋费用分析）")
+st.caption("费用趋势、结构与应付账龄的统一视图；支持筛选与导出多 Sheet 结果")
 # ------------------ 示例数据 ------------------
 def sample_expenses():
     csv = """Date,Dept,Category,VendorCode,Amount

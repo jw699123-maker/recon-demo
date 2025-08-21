@@ -4,9 +4,9 @@ import pandas as pd
 import streamlit as st
 
 # ---------- Page config ----------
-st.set_page_config(page_title="应付对账自动化 Demo", layout="wide")
-st.title("应付对账自动化 Demo（Python + Excel）")
-st.caption("上传发票表与账单表 → 一键对账 → 实时查看差异/缺失/重复 → 下载异常清单")
+st.set_page_config(page_title="对账自动化 Demo（发票×账单）", page_icon="✅", layout="wide")
+st.title("对账自动化 Demo（发票 × 账单）")
+st.caption("上传两张表 → 匹配/差异/缺失/重复 → 一键导出异常清单")
 
 # ---------- Helper: build sample data and download ----------
 def build_sample_df(kind="invoices"):
