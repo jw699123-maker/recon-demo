@@ -50,7 +50,7 @@ with col_samp2:
         "下载示例账单表（bills.xlsx）",
         data=df_to_excel_bytes({"bills": build_sample_df("bills")}),
         file_name="bills_sample.xlsx",
-        mime="application/vnd.openxmlformats-officedocument.spreadocument.spreadsheetml.sheet"
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
 with col_samp3:
     st.info("字段要求：vendor, invoice_no, amount, currency（大小写不敏感，列名可映射）", icon="ℹ️")
